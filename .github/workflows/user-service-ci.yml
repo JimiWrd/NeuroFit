@@ -3,10 +3,10 @@ name: user-service build/test pipeline
 on:
   push:
     paths:
-       - "user-service/**"
+       - "services/user-service/**"
   pull_request:
     paths:
-      - "user-service/**"
+      - "services/user-service/**"
   workflow_dispatch:
 
 jobs:
