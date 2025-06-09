@@ -56,35 +56,35 @@ Key:
                        +----+-----------+-----+
                             |           |
         +-------------------+           +--------------------+
-        |                                                |
-+-------v--------+                               +-------v--------+
-| User Service   |                               | Workout Service|
-| - Spring Sec   |                               | - MongoDB      |
-| - PostgreSQL   |                               | - ML suggestions|
-+-------+--------+                               +-------+--------+
-        |                                                |
-        |                                                |
-+-------v--------+                               +-------v--------+
-| Habit Service  |                               | Gamification   |
-| - Kafka       |                               | - Redis (ZSET) |
-| - S3          |                               +-------+--------+
-+-------+--------+                                       |
-        |                                                |
-        |                                                |
-+-------v--------+                               +-------v--------+
-| Notification   |                               | Analytics      |
-| Service       |                                | - AWS Lambda   |
-| - WebSocket   |                                | - Prometheus   |
-| - FCM         |                                | - DynamoDB/S3  |
-+---------------+                                +----------------+
+        |                                                    |
++-------v--------+                                   +-------v---------+
+| User Service   |                                   | Workout Service |
+| - Spring Sec   |                                   | - MongoDB       |
+| - PostgreSQL   |                                   | - ML suggestions|
++-------+--------+                                   +-------+---------+
+        |                                                    |
+        |                                                    |
++-------v--------+                                   +-------v--------+
+| Habit Service  |                                   | Gamification   |
+| - Kafka        |                                   | - Redis (ZSET) |
+| - S3           |                                   +-------+--------+
++-------+--------+                                           |
+        |                                                    |
+        |                                                    |
++-------v-------+                                    +-------v--------+
+| Notification  |                                    | Analytics      |
+| Service       |                                    | - AWS Lambda   |
+| - WebSocket   |                                    | - Prometheus   |
+| - FCM         |                                    | - DynamoDB/S3  |
++---------------+                                    +----------------+
 
                 +------------------------------------------+
-                |               Infrastructure              |
+                |               Infrastructure             |
                 |                                          |
-                | - Terraform (AWS infra)                   |
-                | - LocalStack (local AWS mocks)            |
-                | - Docker + Docker Compose (local dev)     |
-                | - GitHub Actions (CI/CD pipeline)         |
+                | - Terraform (AWS infra)                  |
+                | - LocalStack (local AWS mocks)           |
+                | - Docker + Docker Compose (local dev)    |
+                | - GitHub Actions (CI/CD pipeline)        |
                 +------------------------------------------+
 
 ```
