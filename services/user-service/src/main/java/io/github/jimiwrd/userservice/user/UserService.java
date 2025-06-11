@@ -3,7 +3,6 @@ package io.github.jimiwrd.userservice.user;
 import io.github.jimiwrd.userservice.user.request.CreateUserRequest;
 import io.github.jimiwrd.userservice.user.response.UserResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -13,7 +12,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserResponse createUser(CreateUserRequest request) {
 

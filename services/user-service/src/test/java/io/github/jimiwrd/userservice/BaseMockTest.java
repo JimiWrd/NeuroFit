@@ -1,7 +1,7 @@
 package io.github.jimiwrd.userservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.jimiwrd.userservice.user.User;
+import io.github.jimiwrd.userservice.error.ErrorResponse;
 import io.github.jimiwrd.userservice.user.request.CreateUserRequest;
 import io.github.jimiwrd.userservice.user.response.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -47,7 +46,10 @@ public class BaseMockTest {
 
     @DynamicPropertySource
     static void containerProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.mongodb.uri", () -> POSTGRES_CONTAINER.getJdbcUrl() + "/organisation-service");;
+        registry.add("spring.datasource.url", () -> POSTGRES_CONTAINER.getJdbcUrl() + "/organisation-service");
+        registry.add("spring.datasource.password", () -> POSTGRES_CONTAINER.getPassword());
+        registry.add("spring.datasource.username", () -> POSTGRES_CONTAINER.getUsername());
+
     }
 
     @BeforeEach
