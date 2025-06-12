@@ -1,7 +1,6 @@
 # 🧠 NeuroFit – ADHD-Focused Fitness Platform
 
-**NeuroFit** is a microservices-based platform designed to help individuals with ADHD build and plan workouts, implementing gamification, notifications, and habit building. 
-Built using Java 21, Spring Boot, AWS services, and a modern DevOps toolchain, this project also showcases distributed system architecture.
+**NeuroFit** is a platform aimed at neurodivergent fitness enthusiasts, designed to support personalised workout planning; utilising gamification features, habit tracking, and notifications. The platform is designed to be cloud-native, implementing a distributed system architecture using Java 21, Spring Boot, and a suite of AWS services, orchestrated through a modern DevOps pipeline.
 
 ---
 
