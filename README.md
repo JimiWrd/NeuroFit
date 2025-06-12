@@ -20,7 +20,7 @@ Built using Java 21, Spring Boot, AWS services, and a modern DevOps toolchain, t
 
 ---
 
-## 🧱 Microservices Architecture (In progress)
+## 🧱 Platform Architecture (In progress)
 
 ```
 Key:
@@ -36,7 +36,7 @@ Key:
 |🔴 **Workout Service**  | Stores workouts, suggests routines via ML|
 |🔴 **Habit Service**    | Tracks daily habits and handles upload of user content|
 |🔴 **Gamification**     | Leaderboards and achievement tracking|
-|🔴 **Notification**     | Real-time push & mobile notifications|
+|🔴 **Notification**     | Real-time push & email notifications|
 |🔴 **Analytics**        | Collects and processes usage data |
 
 ## High Level Diagram
@@ -163,12 +163,14 @@ neurofit-platform/
 
 ## 🧭 Roadmap
 
-* [ ] OAuth2 login via Google/Apple
-* [ ] Advanced habit analytics dashboard
-* [ ] Native mobile app integration
-* [ ] ArgoCD for deployment visualization
+These are some additional features/goals for this project long term, loosely defined currently.
+
+* [ ] OAuth2 login
+* [ ] OpenAPI docs
 * [ ] Rate limiting & throttling
-* [ ] OpenAPI + Swagger UI docs
+* [ ] Mobile application
+* [ ] ArgoCD for deployment visualization and observability
+* [ ] An analytics dashboard
 
 ---
 
