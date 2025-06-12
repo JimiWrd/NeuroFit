@@ -1,6 +1,7 @@
 package io.github.jimiwrd.userservice.unit;
 
 import io.github.jimiwrd.userservice.UserFixtures;
+import io.github.jimiwrd.userservice.exception.BadRequestException;
 import io.github.jimiwrd.userservice.user.User;
 import io.github.jimiwrd.userservice.user.UserRepository;
 import io.github.jimiwrd.userservice.user.UserService;
@@ -46,8 +47,8 @@ public class UserServiceUnitTests {
         when(userRepository.existsByEmail(request.email())).thenReturn(true);
 
         assertThatThrownBy(() -> userService.createUser(request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(String.format("User with email %s already exists", request.email()));
+                .isInstanceOf(BadRequestException.class)
+                .hasMessageContaining("User with email %s already exists", request.email());
     }
 
 }

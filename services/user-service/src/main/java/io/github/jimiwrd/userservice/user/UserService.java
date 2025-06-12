@@ -1,5 +1,6 @@
 package io.github.jimiwrd.userservice.user;
 
+import io.github.jimiwrd.userservice.exception.BadRequestException;
 import io.github.jimiwrd.userservice.user.request.CreateUserRequest;
 import io.github.jimiwrd.userservice.user.response.UserResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class UserService {
     public UserResponse createUser(CreateUserRequest request) {
 
         if(userRepository.existsByEmail(request.email())) {
-            throw new IllegalArgumentException(String.format("User with email %s already exists", request.email()));
+            throw new BadRequestException(String.format("User with email %s already exists", request.email()));
         }
 
         User user = User.builder()
