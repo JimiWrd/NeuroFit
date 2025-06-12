@@ -23,11 +23,11 @@ This is the **User Service** for the NeuroFit platform. It handles user registra
 - Gradle
 - Spring Web
 - Spring Security (to be added)
-- Spring Data JPA (to be added)
-- PostgreSQL (to be added)
+- Spring Data JPA
+- PostgreSQL
 - Lombok
-- Docker (to be added)
-- Testcontainers (to be added)
+- Docker
+- Testcontainers
 
 
 ---
@@ -102,6 +102,7 @@ Key:
 * Login - 🔴
 * Email verification - 🔴
 * Password reset - 🔴
+* Account management - 🔴
 * Rate limiting & brute-force protection - 🔴
 * Audit logging - 🔴
 * OAuth2 support - 🔴
