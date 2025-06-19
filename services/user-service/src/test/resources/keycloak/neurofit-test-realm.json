@@ -1,0 +1,40 @@
+{
+  "realm": "neurofit-test",
+  "enabled": true,
+  "roles": {
+    "realm": [
+      {
+        "name": "USER"
+      }
+    ]
+  },
+  "users": [
+    {
+      "username": "testuser",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password"
+        }
+      ],
+      "realmRoles": ["USER"],
+      "requiredActions": []
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "user-service",
+      "enabled": true,
+      "publicClient": true,
+      "redirectUris": ["*"],
+      "directAccessGrantsEnabled": true
+    },
+    {
+      "clientId": "account",
+      "enabled": true,
+      "publicClient": true,
+      "redirectUris": ["*"]
+    }
+  ]
+}

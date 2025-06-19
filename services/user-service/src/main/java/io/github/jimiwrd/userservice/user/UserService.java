@@ -1,12 +1,12 @@
 package io.github.jimiwrd.userservice.user;
 
-import io.github.jimiwrd.userservice.exception.BadRequestException;
-import io.github.jimiwrd.userservice.user.request.CreateUserRequest;
+import io.github.jimiwrd.userservice.user.request.FindOrCreateRequest;
 import io.github.jimiwrd.userservice.user.response.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -15,27 +15,27 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserResponse createUser(CreateUserRequest request) {
+    public UserResponse findOrCreateUser(FindOrCreateRequest request) {
+        Optional<User> found = userRepository.findByKeycloakId(request.keycloakId());
 
-        if(userRepository.existsByEmail(request.email())) {
-            throw new BadRequestException(String.format("User with email %s already exists", request.email()));
+        if(found.isPresent()) {
+            return UserResponse.fromUser(found.get());
         }
 
         User user = User.builder()
                 .id(UUID.randomUUID())
+                .keycloakId(request.keycloakId())
                 .firstName(request.firstName())
                 .lastName(request.lastName())
                 .username(request.username())
                 .email(request.email())
-                .password(request.password())
-                .role(Role.USER)
-                .emailVerified(false)
+                .role(request.role())
                 .created(Instant.now())
                 .updated(Instant.now())
                 .build();
 
-        userRepository.save(user);
+        User result = userRepository.save(user);
 
-        return UserResponse.fromUser(user);
+        return UserResponse.fromUser(result);
     }
 }

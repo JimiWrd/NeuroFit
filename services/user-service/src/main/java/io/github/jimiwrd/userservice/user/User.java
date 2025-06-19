@@ -27,23 +27,20 @@ public class User {
     private UUID id;
 
     @NonNull
+    private UUID keycloakId;
+
+    @NonNull
     private String firstName;
 
     private String lastName;
 
-    @NonNull
     private String username;
 
     @NonNull
     private String email;
 
     @NonNull
-    private String password;
-
-    @NonNull
     private Role role;
-
-    private boolean emailVerified;
 
     @NonNull
     private Instant created;

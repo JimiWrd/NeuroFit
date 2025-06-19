@@ -2,7 +2,7 @@ package io.github.jimiwrd.userservice;
 
 import io.github.jimiwrd.userservice.user.Role;
 import io.github.jimiwrd.userservice.user.User;
-import io.github.jimiwrd.userservice.user.request.CreateUserRequest;
+import io.github.jimiwrd.userservice.user.request.FindOrCreateRequest;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -14,62 +14,60 @@ public class UserFixtures {
     public static User generateUser() {
         return User.builder()
                 .id(UUID.randomUUID())
+                .keycloakId(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"))
                 .firstName("Jimi")
                 .lastName("Ward")
                 .username("jimiWrd")
                 .email("jimiWrd@email.com")
-                .password("password")
                 .role(Role.USER)
-                .emailVerified(true)
                 .created(Instant.now())
                 .updated(Instant.now())
                 .build();
     }
 
     public static User generateUser(UUID id,
+                                    UUID keycloakId,
                                     String firstName,
                                     String lastName,
                                     String userName,
                                     String email,
-                                    String password,
                                     Role role,
-                                    boolean emailVerified,
                                     Instant now) {
         return User.builder()
                 .id(id)
+                .keycloakId(keycloakId)
                 .firstName(firstName)
                 .lastName(lastName)
                 .username(userName)
                 .email(email)
-                .password(password)
                 .role(role)
-                .emailVerified(emailVerified)
                 .created(now)
                 .updated(now)
                 .build();
     }
 
-    public static CreateUserRequest generateCreateUserRequest() {
-        return CreateUserRequest.builder()
+    public static FindOrCreateRequest generateCreateUserRequest() {
+        return FindOrCreateRequest.builder()
+                .keycloakId(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"))
                 .firstName("Jimi")
                 .lastName("Ward")
                 .username("jimiWrd")
                 .email("jimiWrd@email.com")
-                .password("password")
+                .role(Role.USER)
                 .build();
     }
 
-    public static CreateUserRequest generateCreateUserRequest(String firstName,
-                                                              String lastName,
-                                                              String userName,
-                                                              String email,
-                                                              String password) {
-        return CreateUserRequest.builder()
+    public static FindOrCreateRequest generateCreateUserRequest(String firstName,
+                                                                String lastName,
+                                                                String userName,
+                                                                String email,
+                                                                Role role) {
+        return FindOrCreateRequest.builder()
                 .firstName(firstName)
                 .lastName(lastName)
                 .username(userName)
                 .email(email)
-                .password(password)
+                .role(role)
                 .build();
     }
 }

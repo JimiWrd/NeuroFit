@@ -10,5 +10,37 @@ services:
     volumes:
       - user-db-data:/var/lib/postgresql/data
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    command: start-dev
+    ports:
+      - "8083:8080"
+    environment:
+      KC_DB: dev-mem
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8080
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HEALTH_ENABLED: true
+    healthcheck:
+      test: ["CMD", "true"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+
+  keycloak-config:
+    image: adorsys/keycloak-config-cli:latest
+    depends_on:
+      keycloak:
+        condition: service_healthy
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      IMPORT_PATH: /config
+    volumes:
+      - ./keycloak-config:/config
+
 volumes:
   user-db-data:
