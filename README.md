@@ -8,6 +8,7 @@
 
 - Java 21 + Spring Boot 3.x
 - Docker + Docker Compose
+- Keycloak
 - Terraform
 - GitHub Actions
 - AWS
@@ -31,7 +32,7 @@ Key:
 | Service              | Description |
 |----------------------|-------------|
 |🔴 **API Gateway**      | Entry point, routing, JWT validation|
-|🟡 **User Service**     | Handles registration, login, roles, and profiles|
+|🟡 **User Service**     | Handles user specific operations i.e. user data|
 |🔴 **Workout Service**  | Stores workouts, suggests routines via ML|
 |🔴 **Habit Service**    | Tracks daily habits and handles upload of user content|
 |🔴 **Gamification**     | Leaderboards and achievement tracking|
@@ -49,9 +50,10 @@ Key:
                                   | HTTPS + JWT
                                   v
                        +----------+-----------+
-                       |    API Gateway       |  <-- Spring Cloud Gateway
-                       | (JWT validation,     |
-                       |  routing, rate-limit)|
+                       |      API Gateway     |  <-- Spring Cloud Gateway
+                       |   (Login/Create User |    
+                       |     via keycloak,    |
+                       |  rate limit, routing |
                        +----+-----------+-----+
                             |           |
         +-------------------+           +--------------------+
@@ -104,7 +106,7 @@ Key:
 docker-compose up --build
 ````
 
-### Provision AWS Infra (Dev/Prod)
+### Provision AWS Infra (Dev/Prod) - IN PROGRESS
 
 ```bash
 cd infrastructure/
@@ -155,7 +157,7 @@ neurofit-platform/
 ## 🧪 Testing
 
 * Unit and integration tests per service
-* Testcontainers for DB- and Kafka-backed tests
+* Testcontainers for DB and Kafka tests
 * CI tests via GitHub Actions
 
 ---
@@ -164,7 +166,6 @@ neurofit-platform/
 
 These are some additional features/goals for this project long term, loosely defined currently.
 
-* [ ] OAuth2 login
 * [ ] OpenAPI docs
 * [ ] Rate limiting & throttling
 * [ ] Mobile application
