@@ -2,7 +2,7 @@ spring:
     application:
         name: user-service
     datasource:
-        url: jdbc:postgresql://localhost:5432/microservice
+        url: jdbc:postgresql://localhost:5432/user-service
         username: root
         password: root
     jpa:
