@@ -1,9 +1,10 @@
-package io.github.jimiwrd.userservice;
+package io.github.jimiwrd.userservice.mock;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dasniko.testcontainers.keycloak.KeycloakContainer;
+import io.github.jimiwrd.userservice.UserServiceApplication;
 import io.github.jimiwrd.userservice.error.ErrorResponse;
 import io.github.jimiwrd.userservice.user.response.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +35,9 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = UserServiceApplication.class)
 @ContextConfiguration
@@ -83,15 +86,6 @@ public class BaseMockTest {
     void setup() {
         this.webClient = WebClient.create();
         repositories.forEach(JpaRepository::deleteAll);
-//        if(!usernames.isEmpty()) {
-//            usernames.forEach(u -> {
-//                try {
-//                    deleteKeycloakUser(u);
-//                } catch (Exception e) {
-//                    throw new RuntimeException("Failed to delete user: " + u + ", error: " + e);
-//                }
-//            });
-//        }
     }
 
     public String createKeycloakUser(String username, String password, HttpStatus expectedStatus) throws Exception {
@@ -188,16 +182,18 @@ public class BaseMockTest {
     }
 
 
-    public Object findOrCreateUser(Jwt jwt, HttpStatus expectedStatus) {
+    public Object findOrCreateUser(String jwt, HttpStatus expectedStatus) {
         try {
             ResultActions result = mvc.perform(MockMvcRequestBuilders
-                    .post("/users")
-                    .header("Authorization", "Bearer "+jwt.getTokenValue())
+                    .post("/users").with(csrf())
+                    .header("Authorization", "Bearer " + jwt)
                     .contentType(MediaType.APPLICATION_JSON));
 
             MockHttpServletResponse response = result.andReturn().getResponse();
 
-            if(expectedStatus == HttpStatus.BAD_REQUEST) {
+            System.out.println("XXX: " + response.getContentAsString() +" YYYY");
+
+            if(expectedStatus == HttpStatus.UNAUTHORIZED) {
                 result.andExpect(status().is4xxClientError());
                 return mapper.readValue(response.getContentAsString(), ErrorResponse.class);
             }

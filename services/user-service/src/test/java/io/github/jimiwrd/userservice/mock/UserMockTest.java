@@ -1,6 +1,7 @@
 package io.github.jimiwrd.userservice.mock;
 
-import io.github.jimiwrd.userservice.BaseMockTest;
+import io.github.jimiwrd.userservice.error.ErrorCode;
+import io.github.jimiwrd.userservice.error.ErrorResponse;
 import io.github.jimiwrd.userservice.user.response.UserResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,9 @@ public class UserMockTest extends BaseMockTest {
 
             Jwt jwt = loginKeycloakUser("user", "password");
 
-            UserResponse response = (UserResponse) findOrCreateUser(jwt, HttpStatus.OK);
+            String jwtString = jwt.getTokenValue();
+
+            UserResponse response = (UserResponse) findOrCreateUser(jwtString, HttpStatus.OK);
 
             assertThat(response).isNotNull();
             assertThat(response.keycloakId().toString()).isEqualTo(jwt.getSubject());
@@ -52,4 +55,41 @@ public class UserMockTest extends BaseMockTest {
             fail("Should return JSON response with token, instead threw error:", e);
         }
     }
+
+    @Test
+    void findOrCreateUser_shouldReturnExistingUser_whenExistsAlready() {
+        try {
+            String token = createKeycloakUser("user", "password", HttpStatus.CREATED);
+            assertThat(token).isNotNull();
+
+            String jwt = loginKeycloakUser("user", "password").getTokenValue();
+
+            UserResponse createdUser = (UserResponse) findOrCreateUser(jwt, HttpStatus.OK);
+
+            UserResponse foundUser = (UserResponse) findOrCreateUser(jwt, HttpStatus.OK);
+
+            assertThat(foundUser).isEqualTo(createdUser);
+
+        } catch (Exception e) {
+            fail("Should return JSON response with token, instead threw error:", e);
+        }
+    }
+
+    @Test
+    void findOrCreateUser_shouldReturnErrorResponse_whenJwtInvalid() {
+        try {
+            String token = createKeycloakUser("user", "password", HttpStatus.CREATED);
+            assertThat(token).isNotNull();
+
+            ErrorResponse response = (ErrorResponse) findOrCreateUser("invalid-jwt", HttpStatus.UNAUTHORIZED);
+
+            assertThat(response.message()).contains("Invalid or expired JWT");
+            assertThat(response.errorCode()).isEqualTo(ErrorCode.UNAUTHORISED);
+
+        } catch (Exception e) {
+            fail("Should return JSON response with token, instead threw error:", e);
+        }
+    }
+
+
 }
