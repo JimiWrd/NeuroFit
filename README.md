@@ -13,7 +13,7 @@
 - GitHub Actions
 - AWS
 - LocalStack
-- Testcontainers (for integration testing)
+- Testcontainers (for integration/mock testing)
 - Kafka
 - Redis
 - MongoDB & PostgreSQL
@@ -31,7 +31,7 @@ Key:
 
 | Service              | Description |
 |----------------------|-------------|
-|🔴 **API Gateway**      | Entry point, routing, JWT validation|
+|🟡 **API Gateway**      | Entry point, routing, JWT validation|
 |🟡 **User Service**     | Handles user specific operations i.e. user data|
 |🔴 **Workout Service**  | Stores workouts, suggests routines via ML|
 |🔴 **Habit Service**    | Tracks daily habits and handles upload of user content|
@@ -121,6 +121,9 @@ terraform apply
 ```plaintext
 neurofit-platform/
 │
+├── gateway/                
+│   └── api-gateway/
+│
 ├── services/
 │   ├── user-service/
 │   ├── workout-planner-service/
@@ -129,12 +132,12 @@ neurofit-platform/
 │   └── notification-service/
 │
 ├── shared-libs/
-│   └── common-security/
+│   ├── common-security/
 │   └── common-utils/
 │
 ├── infra/
 │   └── terraform/
-│       └── aws/
+│       ├── aws/
 │       └── local-dev/
 │
 ├── docker/
@@ -146,18 +149,17 @@ neurofit-platform/
 │   └── workflows/
 │       └── ci-cd.yml
 │
-├── README.md       # You are here
+├── README.md     <-- You are here
 └── arch/
     └── diagrams/
-
 ```
 
 ---
 
 ## 🧪 Testing
 
-* Unit and integration tests per service
-* Testcontainers for DB and Kafka tests
+* Unit tests for service logic
+* Mock tests for integration - using TestContainers, WireMock, Docker, etc
 * CI tests via GitHub Actions
 
 ---
