@@ -26,9 +26,23 @@
     {
       "clientId": "user-service",
       "enabled": true,
-      "publicClient": true,
+      "publicClient": false,
+      "secret": "some-secret",
       "redirectUris": ["*"],
-      "directAccessGrantsEnabled": true
+      "directAccessGrantsEnabled": true,
+      "protocolMappers": [
+        {
+          "name": "audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.client.audience": "user-service",
+            "id.token.claim": "false",
+            "access.token.claim": "true"
+          }
+        }
+      ]
     },
     {
       "clientId": "account",

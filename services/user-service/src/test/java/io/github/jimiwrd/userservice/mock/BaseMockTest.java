@@ -35,7 +35,6 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -79,13 +78,17 @@ public class BaseMockTest {
         registry.add("spring.datasource.username", () -> POSTGRES_CONTAINER.getUsername());
 
         // KEYCLOAK config setup
-        registry.add("spring.security.oauth2.resourceserver.jwt.issuer-uri", () -> KEYCLOAK_CONTAINER.getAuthServerUrl() + "/realms/neurofit-test");
+        String issuerUri = KEYCLOAK_CONTAINER.getAuthServerUrl() + "/realms/neurofit-test";
+        registry.add("spring.security.oauth2.resourceserver.jwt.issuer-uri", () -> issuerUri);
     }
 
     @BeforeEach
     void setup() {
         this.webClient = WebClient.create();
         repositories.forEach(JpaRepository::deleteAll);
+
+        String jwkUri = KEYCLOAK_CONTAINER.getAuthServerUrl() + "/realms/neurofit-test/protocol/openid-connect/certs";
+        String jwks = webClient.get().uri(jwkUri).retrieve().bodyToMono(String.class).block();
     }
 
     public String createKeycloakUser(String username, String password, HttpStatus expectedStatus) throws Exception {
@@ -147,6 +150,7 @@ public class BaseMockTest {
         String clientId = "user-service";
 
         String body = "grant_type=password&client_id=" + clientId +
+                "&client_secret=some-secret" +
                 "&username=" + username +
                 "&password=" + password;
 
@@ -185,13 +189,11 @@ public class BaseMockTest {
     public Object findOrCreateUser(String jwt, HttpStatus expectedStatus) {
         try {
             ResultActions result = mvc.perform(MockMvcRequestBuilders
-                    .post("/users").with(csrf())
+                    .post("/users")
                     .header("Authorization", "Bearer " + jwt)
                     .contentType(MediaType.APPLICATION_JSON));
 
             MockHttpServletResponse response = result.andReturn().getResponse();
-
-            System.out.println("XXX: " + response.getContentAsString() +" YYYY");
 
             if(expectedStatus == HttpStatus.UNAUTHORIZED) {
                 result.andExpect(status().is4xxClientError());
