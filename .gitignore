@@ -1,6 +1,7 @@
 HELP.md
-services/user-service/.gradle
+services/**/.gradle
 gateway/neurofit-gateway/.gradle
+infrastructure/**/.gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/

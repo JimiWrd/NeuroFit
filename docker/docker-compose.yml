@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8180:8080"
+    command: start-dev
+
+  eureka-server:
+    build: ../services/eureka-server
+    ports:
+      - "8761:8761"
+
+  neurofit-gateway:
+    build: ../gateway/neurofit-gateway
+    depends_on:
+      - eureka-server
+      - keycloak
+    environment:
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/neurofit
+    ports:
+      - "8080:8080"
+
+  user-service:
+    build: ../services/user-service
+    depends_on:
+      - eureka-server
+      - keycloak
+    environment:
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/neurofit
