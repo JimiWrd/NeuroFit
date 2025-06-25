@@ -3,15 +3,23 @@ spring:
     name: neurofit-gateway
   cloud:
     gateway:
-      routes:
-        - id: user-service
-          uri: lb://user-service
-          predicates:
-            - Path=/users/**
-          filters:
-            - TokenRelay=
+      server:
+        webflux:
+          routes:
+            - id: user-service
+              uri: lb://user-service
+              predicates:
+                - Path=/users/**
+              filters:
+                - TokenRelay=
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: ${your-keycloak-url}/realms/neurofit-test
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
