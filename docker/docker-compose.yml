@@ -1,33 +1,83 @@
-version: '3.8'
 services:
   keycloak:
     image: quay.io/keycloak/keycloak:latest
+    command: start-dev
+    ports:
+      - "8081:8080"
     environment:
+      KC_DB: dev-mem
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8080
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-    ports:
-      - "8180:8080"
-    command: start-dev
+      KC_HEALTH_ENABLED: true
+    healthcheck:
+      test: [ "CMD", "true" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  keycloak-config:
+    image: adorsys/keycloak-config-cli:latest
+    depends_on:
+      keycloak:
+        condition: service_healthy
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      IMPORT_PATH: /config
+    volumes:
+      - ./keycloak:/config
 
   eureka-server:
-    build: ../services/eureka-server
+    build:
+      context: ../infrastructure/eureka-server
     ports:
       - "8761:8761"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   neurofit-gateway:
-    build: ../gateway/neurofit-gateway
+    build:
+      context: ../gateway/neurofit-gateway
     depends_on:
-      - eureka-server
-      - keycloak
+      eureka-server:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
     environment:
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/neurofit
     ports:
       - "8080:8080"
 
+  user-db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+      POSTGRES_DB: user-service
+    volumes:
+      - user-db-data:/var/lib/postgresql/data
+
   user-service:
-    build: ../services/user-service
+    build:
+      context: ../services/user-service
     depends_on:
       - eureka-server
       - keycloak
+      - user-db
     environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:postgresql://user-db:5432/user-service
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: user
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/neurofit
+
+volumes:
+  user-db-data:

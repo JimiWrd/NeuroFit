@@ -38,7 +38,7 @@ class NeurofitGatewayApplicationTests {
 	@Test
 	void routesAreConfiguredCorrectly() {
 		StepVerifier.create(routeLocator.getRoutes())
-				.expectNextCount(1) // Adjust based on your route count
+				.expectNextCount(4) // Adjust based on your route count
 				.verifyComplete();
 	}
 

@@ -2,10 +2,35 @@ spring:
   application:
     name: neurofit-gateway
   cloud:
+    loadbalancer:
+      retry:
+        enabled: true
     gateway:
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
       server:
         webflux:
           routes:
+            - id: keycloak-login
+              uri: http://keycloak:8080
+              predicates:
+                - Path=/login
+              filters:
+                - SetPath=/realms/neurofit/protocol/openid-connect/auth
+            - id: keycloak-register
+              uri: http://keycloak:8080
+              predicates:
+                - Path=/register
+              filters:
+                - SetPath=/realms/neurofit/protocol/openid-connect/registrations
+            - id: keycloak-auth
+              uri: http://keycloak:8080
+              predicates:
+                - Path=/realms/neurofit/**
+              filters:
+                - RewritePath=/realms/(?<realm>[^/]+)/(?<remaining>.*), /realms/${realm}/${remaining}
             - id: user-service
               uri: lb://user-service
               predicates:
@@ -16,7 +41,17 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${your-keycloak-url}/realms/neurofit-test
+          issuer-uri:
+
+eureka:
+  client:
+    initial-instance-info-replication-interval-seconds: 5
+    instance-info-replication-interval-seconds: 5
+    registry-fetch-interval-seconds: 5
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka/
+    registerWithEureka: true
+    fetchRegistry: true
 
 management:
   endpoints:

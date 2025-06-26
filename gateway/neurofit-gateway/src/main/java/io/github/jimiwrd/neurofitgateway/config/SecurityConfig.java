@@ -15,9 +15,10 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .authorizeExchange(e ->
-                        e.pathMatchers("actuator/health/**")
-                                .permitAll()
+                .authorizeExchange(auth -> auth
+                                .pathMatchers("actuator/health/**").permitAll()
+                                .pathMatchers("/register", "/login").permitAll()
+                                .pathMatchers("/realms/neurofit/**").permitAll()
                                 .anyExchange()
                                 .authenticated()
                         )
