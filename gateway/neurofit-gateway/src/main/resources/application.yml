@@ -2,46 +2,35 @@ spring:
   application:
     name: neurofit-gateway
   cloud:
-    loadbalancer:
-      retry:
-        enabled: true
     gateway:
-      discovery:
-        locator:
-          enabled: true
-          lowerCaseServiceId: true
-      server:
-        webflux:
-          routes:
-            - id: keycloak-login
-              uri: http://keycloak:8080
-              predicates:
-                - Path=/login
-              filters:
-                - SetPath=/realms/neurofit/protocol/openid-connect/auth
-            - id: keycloak-register
-              uri: http://keycloak:8080
-              predicates:
-                - Path=/register
-              filters:
-                - SetPath=/realms/neurofit/protocol/openid-connect/registrations
-            - id: keycloak-auth
-              uri: http://keycloak:8080
-              predicates:
-                - Path=/realms/neurofit/**
-              filters:
-                - RewritePath=/realms/(?<realm>[^/]+)/(?<remaining>.*), /realms/${realm}/${remaining}
-            - id: user-service
-              uri: lb://user-service
-              predicates:
-                - Path=/users/**
-              filters:
-                - TokenRelay=
+      routes:
+#        - id: keycloak-login
+#          uri: http://keycloak:8080
+#          predicates:
+#            - Path=/login
+#          filters:
+#            - Need to fix the login still
+        - id: keycloak-register
+          uri: http://keycloak:8080
+          predicates:
+            - Path=/register
+          filters:
+            - RedirectTo=302, http://localhost:8081/realms/neurofit/protocol/openid-connect/registrations?client_id=neurofit-gateway
+        - id: keycloak-auth
+          uri: http://keycloak:8080
+          predicates:
+            - Path=/realms/neurofit/**
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/users/**
+          filters:
+            - TokenRelay=
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri:
+          issuer-uri: http://localhost:8080/realms/neurofit
 
 eureka:
   client:
