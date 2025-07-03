@@ -2,6 +2,7 @@ package io.github.jimiwrd.workoutservice.exercise;
 
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseCreateResponse;
+import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,8 +41,16 @@ public class Exercise {
                 .build();
     }
 
-    public ExerciseCreateResponse toResponse() {
+    public ExerciseCreateResponse toCreateResponse() {
         return new ExerciseCreateResponse(
+                this.name,
+                this.description,
+                this.bodyPart
+        );
+    }
+
+    public ExerciseResponse toResponse() {
+        return new ExerciseResponse(
                 this.name,
                 this.description,
                 this.bodyPart
