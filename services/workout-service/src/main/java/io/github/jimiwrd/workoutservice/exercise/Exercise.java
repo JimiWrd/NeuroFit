@@ -3,11 +3,7 @@ package io.github.jimiwrd.workoutservice.exercise;
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseCreateResponse;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -43,6 +39,7 @@ public class Exercise {
 
     public ExerciseCreateResponse toCreateResponse() {
         return new ExerciseCreateResponse(
+                this.id,
                 this.name,
                 this.description,
                 this.bodyPart
@@ -51,6 +48,7 @@ public class Exercise {
 
     public ExerciseResponse toResponse() {
         return new ExerciseResponse(
+                this.id,
                 this.name,
                 this.description,
                 this.bodyPart

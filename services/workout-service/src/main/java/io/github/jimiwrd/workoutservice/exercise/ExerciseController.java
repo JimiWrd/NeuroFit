@@ -3,6 +3,7 @@ package io.github.jimiwrd.workoutservice.exercise;
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseCreateResponse;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ public class ExerciseController {
     private final ExerciseService exerciseService;
 
     @PostMapping
-    public ExerciseCreateResponse create(@RequestBody ExerciseCreateRequest request) {
+    public ExerciseCreateResponse create(@Valid @RequestBody ExerciseCreateRequest request) {
         return exerciseService.create(request);
     }
 

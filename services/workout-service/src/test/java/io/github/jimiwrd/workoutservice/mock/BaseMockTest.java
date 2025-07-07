@@ -2,8 +2,10 @@ package io.github.jimiwrd.workoutservice.mock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.jimiwrd.workoutservice.WorkoutServiceApplication;
+import io.github.jimiwrd.workoutservice.error.ErrorResponse;
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseCreateResponse;
+import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,6 +23,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.testcontainers.containers.MongoDBContainer;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Fail.fail;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -69,14 +72,39 @@ public class BaseMockTest {
 
             MockHttpServletResponse response = result.andReturn().getResponse();
 
-            if(expectedStatusCode == 200) {
-                return mapper.readValue(response.getContentAsString(), ExerciseCreateResponse.class);
-            }
+            return switch (expectedStatusCode) {
+                case 200 -> mapper.readValue(response.getContentAsString(), ExerciseCreateResponse.class);
+                case 400 -> mapper.readValue(response.getContentAsString(), ErrorResponse.class);
+                default -> throw new IllegalStateException("Unexpected value: " + expectedStatusCode);
+            };
+
         } catch (Exception e) {
             fail(String.format("createExercise failed, error: %s", e.getMessage()));
         }
 
         throw new RuntimeException("createExercise() failed.");
+    }
+
+    protected Object getExercise(UUID id, int expectedStatusCode) {
+        try{
+            ResultActions result = mvc.perform(MockMvcRequestBuilders
+                            .get("/exercise")
+                            .param("id", id.toString()))
+                    .andExpect(status().is(expectedStatusCode));
+
+            MockHttpServletResponse response = result.andReturn().getResponse();
+
+            return switch (expectedStatusCode) {
+                case 200 -> mapper.readValue(response.getContentAsString(), ExerciseResponse.class);
+                case 400 -> mapper.readValue(response.getContentAsString(), ErrorResponse.class);
+                default -> throw new IllegalStateException("Unexpected value: " + expectedStatusCode);
+            };
+
+        } catch (Exception e) {
+            fail(String.format("getExercise failed, error: %s", e.getMessage()));
+        }
+
+        throw new RuntimeException("getExercise() failed.");
     }
 
 }
