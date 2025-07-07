@@ -1,4 +1,5 @@
 HELP.md
+CLAUDE.md
 services/**/.gradle
 gateway/neurofit-gateway/.gradle
 infrastructure/**/.gradle
