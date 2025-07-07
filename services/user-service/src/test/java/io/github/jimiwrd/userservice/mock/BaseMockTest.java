@@ -46,11 +46,11 @@ public class BaseMockTest {
 
     static PostgreSQLContainer<?> POSTGRES_CONTAINER = new PostgreSQLContainer<>("postgres:latest");
 
-    static KeycloakContainer KEYCLOAK_CONTAINER = new KeycloakContainer();
+    static KeycloakContainer KEYCLOAK_CONTAINER = new KeycloakContainer()
+            .withRealmImportFile("/keycloak/neurofit-test-realm.json");
 
     static {
         POSTGRES_CONTAINER.start();
-        KEYCLOAK_CONTAINER.withRealmImportFile("/keycloak/neurofit-test-realm.json");
         KEYCLOAK_CONTAINER.start();
     }
 
@@ -68,12 +68,10 @@ public class BaseMockTest {
     @Autowired
     private List<JpaRepository<?, ?>> repositories;
 
-//    private List<String> usernames = new ArrayList<>();
-
     @DynamicPropertySource
     static void containerProperties(DynamicPropertyRegistry registry) {
         // POSTGRES config setup
-        registry.add("spring.datasource.url", () -> POSTGRES_CONTAINER.getJdbcUrl() + "/organisation-service");
+        registry.add("spring.datasource.url", () -> POSTGRES_CONTAINER.getJdbcUrl());
         registry.add("spring.datasource.password", () -> POSTGRES_CONTAINER.getPassword());
         registry.add("spring.datasource.username", () -> POSTGRES_CONTAINER.getUsername());
 
