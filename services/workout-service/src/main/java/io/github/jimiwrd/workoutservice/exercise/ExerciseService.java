@@ -5,6 +5,7 @@ import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseUpdateRequest;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,5 +47,18 @@ public class ExerciseService {
         }
 
         return exercise.toResponse();
+    }
+
+    @Transactional
+    public ResponseEntity<String> delete(UUID id) {
+        Optional<Exercise> optional = exerciseRepository.findById(id);
+
+        if(optional.isEmpty()) {
+            throw new BadRequestException("No Exercise found with ID: " + id);
+        }
+
+        exerciseRepository.deleteById(id);
+
+        return ResponseEntity.ok("Entity with id: " + id.toString() + " deleted.");
     }
 }

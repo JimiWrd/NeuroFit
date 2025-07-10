@@ -5,6 +5,7 @@ import io.github.jimiwrd.workoutservice.exercise.request.ExerciseUpdateRequest;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -29,5 +30,10 @@ public class ExerciseController {
     @PutMapping("/{id}")
     public ExerciseResponse update(@PathVariable("id") UUID id, @RequestBody ExerciseUpdateRequest request) {
         return exerciseService.update(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable("id") UUID id) {
+        return exerciseService.delete(id);
     }
 }

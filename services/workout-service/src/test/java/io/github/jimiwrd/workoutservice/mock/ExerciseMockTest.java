@@ -8,6 +8,7 @@ import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseUpdateRequest;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.ResponseEntity;
 
 import java.util.UUID;
 
@@ -77,6 +78,28 @@ class ExerciseMockTest extends BaseMockTest {
         ErrorResponse response = (ErrorResponse) updateExercise(UUID.randomUUID(), updateRequest, 400);
 
         assertThat(response.code()).isEqualTo(ErrorCode.BAD_REQUEST);
+    }
+
+    @Test
+    void deleteExercise_exists_shouldReturnResponseEntityString() {
+        ExerciseCreateRequest request = ExerciseFixtures.exerciseCreateRequest(BodyPart.ARMS);
+
+        ExerciseResponse response = (ExerciseResponse) createExercise(request, 200);
+
+        assertThat(response.name()).isEqualTo("name");
+        assertThat(response.description()).isEqualTo("desc");
+        assertThat(response.bodyPart()).isEqualTo(BodyPart.ARMS);
+
+        String result = (String) deleteExercise(response.id(), 200);
+
+        assertThat(result).contains("Entity with id: " + response.id() + " deleted.");
+    }
+
+    @Test
+    void deleteExercise_doesNotExist_shouldReturnErrorResponse() {
+        ErrorResponse result = (ErrorResponse) deleteExercise(UUID.randomUUID(), 400);
+
+        assertThat(result.code()).isEqualTo(ErrorCode.BAD_REQUEST);
     }
 
 }

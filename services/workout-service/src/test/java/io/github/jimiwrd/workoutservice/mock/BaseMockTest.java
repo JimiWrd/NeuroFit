@@ -130,4 +130,24 @@ public class BaseMockTest {
         throw new RuntimeException("updateExercise() failed.");
     }
 
+    protected Object deleteExercise(UUID id, int expectedStatusCode) {
+        try {
+            ResultActions result = mvc.perform(MockMvcRequestBuilders
+                    .delete("/exercise/{id}", id))
+                    .andExpect(status().is(expectedStatusCode));
+
+            MockHttpServletResponse response = result.andReturn().getResponse();
+
+            if(expectedStatusCode == 200) {
+                return response.getContentAsString();
+            }
+
+            return mapper.readValue(response.getContentAsString(), ErrorResponse.class);
+        } catch (Exception e) {
+            fail(String.format("deleteExercise failed, error: %s", e.getMessage()));
+        }
+
+        throw new RuntimeException("deleteExercise() failed.");
+    }
+
 }
