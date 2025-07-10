@@ -3,6 +3,8 @@ package io.github.jimiwrd.workoutservice.error;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
+
 @Getter
 public class BaseException extends RuntimeException {
 
@@ -17,6 +19,6 @@ public class BaseException extends RuntimeException {
     }
 
     public ErrorResponse toErrorResponse() {
-      return new ErrorResponse(errorCode, getMessage());
+      return new ErrorResponse(errorCode, getMessage(), List.of());
     }
 }

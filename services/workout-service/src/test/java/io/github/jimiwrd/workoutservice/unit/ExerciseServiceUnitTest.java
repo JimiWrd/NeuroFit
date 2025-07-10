@@ -7,7 +7,6 @@ import io.github.jimiwrd.workoutservice.exercise.Exercise;
 import io.github.jimiwrd.workoutservice.exercise.ExerciseRepository;
 import io.github.jimiwrd.workoutservice.exercise.ExerciseService;
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
-import io.github.jimiwrd.workoutservice.exercise.response.ExerciseCreateResponse;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,7 +37,7 @@ public class ExerciseServiceUnitTest {
 
         when(exerciseRepository.save(ArgumentMatchers.any(Exercise.class))).thenReturn(Exercise.from(request));
 
-        ExerciseCreateResponse response = exerciseService.create(request);
+        ExerciseResponse response = exerciseService.create(request);
 
         assertThat(response.name()).isEqualTo(request.name());
         assertThat(response.description()).isEqualTo(request.description());

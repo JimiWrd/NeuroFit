@@ -2,7 +2,7 @@ package io.github.jimiwrd.workoutservice.exercise;
 
 import io.github.jimiwrd.workoutservice.error.BadRequestException;
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
-import io.github.jimiwrd.workoutservice.exercise.response.ExerciseCreateResponse;
+import io.github.jimiwrd.workoutservice.exercise.request.ExerciseUpdateRequest;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,15 +18,33 @@ public class ExerciseService {
     private final ExerciseRepository exerciseRepository;
 
     @Transactional
-    public ExerciseCreateResponse create(ExerciseCreateRequest request) {
+    public ExerciseResponse create(ExerciseCreateRequest request) {
         Exercise result =  exerciseRepository.save(Exercise.from(request));
 
-        return result.toCreateResponse();
+        return result.toResponse();
     }
 
-    public ExerciseResponse getById(UUID uuid) {
-        Optional<Exercise> exercise =  exerciseRepository.findById(uuid);
+    public ExerciseResponse getById(UUID id) {
+        Optional<Exercise> exercise =  exerciseRepository.findById(id);
 
-        return exercise.orElseThrow(() -> new BadRequestException("No Exercise found with ID: " + uuid)).toResponse();
+        return exercise.orElseThrow(() -> new BadRequestException("No Exercise found with ID: " + id)).toResponse();
+    }
+
+    @Transactional
+    public ExerciseResponse update(UUID id, ExerciseUpdateRequest request) {
+        Optional<Exercise> optional = exerciseRepository.findById(id);
+
+        if(optional.isEmpty()) {
+            throw new BadRequestException("No Exercise found with ID: " + id);
+        }
+
+        Exercise exercise = optional.get();
+        boolean dirty = exercise.merge(request);
+
+        if(dirty) {
+            exerciseRepository.save(exercise);
+        }
+
+        return exercise.toResponse();
     }
 }

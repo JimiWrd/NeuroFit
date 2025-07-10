@@ -1,7 +1,7 @@
 package io.github.jimiwrd.workoutservice.exercise;
 
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
-import io.github.jimiwrd.workoutservice.exercise.response.ExerciseCreateResponse;
+import io.github.jimiwrd.workoutservice.exercise.request.ExerciseUpdateRequest;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
@@ -37,15 +38,6 @@ public class Exercise {
                 .build();
     }
 
-    public ExerciseCreateResponse toCreateResponse() {
-        return new ExerciseCreateResponse(
-                this.id,
-                this.name,
-                this.description,
-                this.bodyPart
-        );
-    }
-
     public ExerciseResponse toResponse() {
         return new ExerciseResponse(
                 this.id,
@@ -53,6 +45,27 @@ public class Exercise {
                 this.description,
                 this.bodyPart
         );
+    }
+
+    public boolean merge(ExerciseUpdateRequest request) {
+        boolean dirty = false;
+
+        if(request.name() != null && !Objects.equals(this.name, request.name())) {
+            this.name = request.name();
+            dirty = true;
+        }
+
+        if(request.description() != null && !Objects.equals(this.description, request.description())) {
+            this.description = request.description();
+            dirty = true;
+        }
+
+        if(request.bodyPart() != null && !Objects.equals(this.bodyPart, request.bodyPart())) {
+            this.bodyPart = request.bodyPart();
+            dirty = true;
+        }
+
+        return dirty;
     }
 
 }
