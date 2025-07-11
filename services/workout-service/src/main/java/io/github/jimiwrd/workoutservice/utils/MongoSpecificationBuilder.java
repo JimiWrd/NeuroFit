@@ -1,12 +1,13 @@
 package io.github.jimiwrd.workoutservice.utils;
 
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+@Component
 public class MongoSpecificationBuilder {
     public Criteria buildCriteria(Map<String, Object> filters) {
         Criteria criteria = new Criteria();
