@@ -4,7 +4,7 @@ import io.github.jimiwrd.workoutservice.ExerciseFixtures;
 import io.github.jimiwrd.workoutservice.error.BadRequestException;
 import io.github.jimiwrd.workoutservice.exercise.BodyPart;
 import io.github.jimiwrd.workoutservice.exercise.Exercise;
-import io.github.jimiwrd.workoutservice.exercise.ExerciseRepository;
+import io.github.jimiwrd.workoutservice.exercise.repository.ExerciseRepository;
 import io.github.jimiwrd.workoutservice.exercise.ExerciseService;
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;

@@ -87,12 +87,12 @@ public class BaseMockTest {
 
     protected Object getExercise(UUID id, int expectedStatusCode) {
         try{
-            ResultActions result = mvc.perform(MockMvcRequestBuilders
+            var result = mvc.perform(MockMvcRequestBuilders
                             .get("/exercise/{id}", id)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is(expectedStatusCode));
 
-            MockHttpServletResponse response = result.andReturn().getResponse();
+            var response = result.andReturn().getResponse();
 
             return switch (expectedStatusCode) {
                 case 200 -> mapper.readValue(response.getContentAsString(), ExerciseResponse.class);
@@ -109,13 +109,13 @@ public class BaseMockTest {
 
     protected Object updateExercise(UUID id, ExerciseUpdateRequest request, int expectedStatusCode) {
         try{
-            ResultActions result = mvc.perform(MockMvcRequestBuilders
+            var result = mvc.perform(MockMvcRequestBuilders
                             .put("/exercise/{id}", id)
                             .content(mapper.writeValueAsBytes(request))
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is(expectedStatusCode));
 
-            MockHttpServletResponse response = result.andReturn().getResponse();
+            var response = result.andReturn().getResponse();
 
             return switch (expectedStatusCode) {
                 case 200 -> mapper.readValue(response.getContentAsString(), ExerciseResponse.class);
@@ -132,11 +132,11 @@ public class BaseMockTest {
 
     protected Object deleteExercise(UUID id, int expectedStatusCode) {
         try {
-            ResultActions result = mvc.perform(MockMvcRequestBuilders
+            var result = mvc.perform(MockMvcRequestBuilders
                     .delete("/exercise/{id}", id))
                     .andExpect(status().is(expectedStatusCode));
 
-            MockHttpServletResponse response = result.andReturn().getResponse();
+            var response = result.andReturn().getResponse();
 
             if(expectedStatusCode == 200) {
                 return response.getContentAsString();

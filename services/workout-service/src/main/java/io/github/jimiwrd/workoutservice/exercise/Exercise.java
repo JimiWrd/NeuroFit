@@ -48,7 +48,7 @@ public class Exercise {
     }
 
     public boolean merge(ExerciseUpdateRequest request) {
-        boolean dirty = false;
+        var dirty = false;
 
         if(request.name() != null && !Objects.equals(this.name, request.name())) {
             this.name = request.name();
