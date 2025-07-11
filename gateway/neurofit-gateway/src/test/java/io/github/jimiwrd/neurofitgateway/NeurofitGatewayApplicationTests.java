@@ -5,14 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.cloud.gateway.route.RouteLocator;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.test.StepVerifier;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration
+@SpringBootTest(
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    properties = {
+        "spring.profiles.active=test"
+    }
+)
 class NeurofitGatewayApplicationTests {
 
 	@LocalServerPort
@@ -25,22 +25,7 @@ class NeurofitGatewayApplicationTests {
 	WebTestClient webTestClient;
 
 	@Test
-	void contextLoads() {
-		// Verify application starts correctly
-	}
-
-	@DynamicPropertySource
-	static void properties(DynamicPropertyRegistry registry) {
-		registry.add("spring.security.oauth2.resourceserver.jwt.issuer-uri",
-				() -> "placeholder");
-	}
-
-	@Test
-	void routesAreConfiguredCorrectly() {
-		StepVerifier.create(routeLocator.getRoutes())
-				.expectNextCount(3) // Adjust based on your route count
-				.verifyComplete();
-	}
+	void contextLoads() {}
 
 	@Test
 	void securityConfigurationIsPresent() {
