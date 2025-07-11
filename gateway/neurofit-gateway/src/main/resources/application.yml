@@ -4,18 +4,6 @@ spring:
   cloud:
     gateway:
       routes:
-#        - id: keycloak-login
-#          uri: http://keycloak:8080
-#          predicates:
-#            - Path=/login
-#          filters:
-#            - Need to fix the login still
-        - id: keycloak-register
-          uri: http://keycloak:8080
-          predicates:
-            - Path=/register
-          filters:
-            - RedirectTo=302, http://localhost:8081/realms/neurofit/protocol/openid-connect/registrations?client_id=neurofit-gateway
         - id: keycloak-auth
           uri: http://keycloak:8080
           predicates:
@@ -28,9 +16,23 @@ spring:
             - TokenRelay=
   security:
     oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: neurofit-gateway
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope: openid,profile,email
+        provider:
+          keycloak:
+            issuer-uri: http://keycloak:8080/realms/neurofit
+            authorization-uri: http://localhost:8081/realms/neurofit/protocol/openid-connect/auth
+            token-uri: http://keycloak:8080/realms/neurofit/protocol/openid-connect/token
+            user-info-uri: http://keycloak:8080/realms/neurofit/protocol/openid-connect/userinfo
+            jwk-set-uri: http://keycloak:8080/realms/neurofit/protocol/openid-connect/certs
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8080/realms/neurofit
+          issuer-uri: http://keycloak:8080/realms/neurofit
 
 eureka:
   client:

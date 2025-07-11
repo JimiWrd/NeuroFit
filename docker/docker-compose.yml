@@ -6,8 +6,10 @@ services:
       - "8081:8080"
     environment:
       KC_DB: dev-mem
-      KC_HOSTNAME: localhost
-      KC_HOSTNAME_PORT: 8081
+      KC_HOSTNAME: keycloak
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_ADMIN_URL: http://localhost:8081
+      KC_HOSTNAME_STRICT_BACKCHANNEL: false
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_HEALTH_ENABLED: true
@@ -49,6 +51,8 @@ services:
         condition: service_healthy
       keycloak:
         condition: service_healthy
+      keycloak-config:
+        condition: service_completed_successfully
     environment:
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/neurofit
     ports:

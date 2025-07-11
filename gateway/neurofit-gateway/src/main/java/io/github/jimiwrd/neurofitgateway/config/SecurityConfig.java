@@ -17,11 +17,11 @@ public class SecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(auth -> auth
                                 .pathMatchers("actuator/health/**").permitAll()
-                                .pathMatchers("/register", "/login").permitAll()
                                 .pathMatchers("/realms/neurofit/**").permitAll()
                                 .anyExchange()
                                 .authenticated()
                         )
+                .oauth2Login(Customizer.withDefaults())
                 .oauth2ResourceServer(auth -> auth.jwt(Customizer.withDefaults()))
                 .build();
     }
