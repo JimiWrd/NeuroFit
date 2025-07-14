@@ -1,11 +1,13 @@
 package io.github.jimiwrd.workoutservice.mock;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.jimiwrd.workoutservice.WorkoutServiceApplication;
 import io.github.jimiwrd.workoutservice.error.ErrorResponse;
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseUpdateRequest;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
+import io.github.jimiwrd.workoutservice.page.PageResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -37,10 +39,6 @@ public class BaseMockTest {
 
     static MongoDBContainer MONGO_CONTAINER = new MongoDBContainer("mongo:latest").withExposedPorts(27017).withReuse(true);
 
-    static {
-        MONGO_CONTAINER.start();
-    }
-
     @Autowired
     protected MockMvc mvc;
 
@@ -49,6 +47,10 @@ public class BaseMockTest {
 
     @Autowired
     private List<MongoRepository<?, ?>> repositories;
+
+    static {
+        MONGO_CONTAINER.start();
+    }
 
     @DynamicPropertySource
     static void containerProperties(DynamicPropertyRegistry registry) {
@@ -60,6 +62,24 @@ public class BaseMockTest {
     @BeforeEach
     void clearRepositories() {
         repositories.forEach(MongoRepository::deleteAll);
+    }
+
+    protected Object createExercise(ExerciseCreateRequest request) {
+        try{
+            ResultActions result = mvc.perform(MockMvcRequestBuilders
+                            .post("/exercise")
+                            .content(mapper.writeValueAsBytes(request))
+                            .contentType(MediaType.APPLICATION_JSON));
+
+            MockHttpServletResponse response = result.andReturn().getResponse();
+
+            return mapper.readValue(response.getContentAsString(), ExerciseResponse.class);
+
+        } catch (Exception e) {
+            fail(String.format("createExercise failed, error: %s", e.getMessage()));
+        }
+
+        throw new RuntimeException("createExercise() failed.");
     }
 
     protected Object createExercise(ExerciseCreateRequest request, int expectedStatusCode) {
@@ -148,6 +168,31 @@ public class BaseMockTest {
         }
 
         throw new RuntimeException("deleteExercise() failed.");
+    }
+
+    protected Object getAllExercises(int page, int size, int expectedStatusCode) {
+        try{
+            var result = mvc.perform(MockMvcRequestBuilders
+                            .get("/exercise")
+                            .param("page", Integer.toString(page))
+                            .param("size", Integer.toString(size))
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().is(expectedStatusCode));
+
+            var response = result.andReturn().getResponse();
+
+            return switch (expectedStatusCode) {
+                case 200 -> mapper.readValue(response.getContentAsString(), new TypeReference<PageResponse<ExerciseResponse>>() {
+                });
+                case 400 -> mapper.readValue(response.getContentAsString(), ErrorResponse.class);
+                default -> throw new IllegalStateException("Unexpected value: " + expectedStatusCode);
+            };
+
+        } catch (Exception e) {
+            fail(String.format("getAllExercises failed, error: %s", e.getMessage()));
+        }
+
+        throw new RuntimeException("getAllExercises() failed.");
     }
 
 }

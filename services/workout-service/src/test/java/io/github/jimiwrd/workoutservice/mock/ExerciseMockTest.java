@@ -7,6 +7,7 @@ import io.github.jimiwrd.workoutservice.exercise.BodyPart;
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseUpdateRequest;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
+import io.github.jimiwrd.workoutservice.page.PageResponse;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -99,6 +100,21 @@ class ExerciseMockTest extends BaseMockTest {
         ErrorResponse result = (ErrorResponse) deleteExercise(UUID.randomUUID(), 400);
 
         assertThat(result.code()).isEqualTo(ErrorCode.BAD_REQUEST);
+    }
+
+    @Test
+    void getAllExercises_shouldReturnPageableOfResponses() {
+        //Create 10 exercises to fetch
+        ExerciseFixtures.createExercises(10, this::createExercise);
+
+        int page = 0;
+        int size = 10;
+
+        PageResponse<ExerciseResponse> responsePage = (PageResponse<ExerciseResponse>) getAllExercises(page, size, 200);
+
+        assertThat(responsePage.getElements()).isEqualTo(size);
+        assertThat(responsePage.getTotalPages()).isEqualTo(1);
+        assertThat(responsePage.getContent().getFirst()).isInstanceOf(ExerciseResponse.class);
     }
 
 }
