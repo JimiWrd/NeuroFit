@@ -35,7 +35,7 @@ Key:
 |🟡 **Eureka Server**    | Eureka server for service registration and discovery|
 |🟡 **Keycloak**         | Authentication, user management, JWT provision|
 |🟡 **User Service**     | Handles user specific operations i.e. user data|
-|🔴 **Workout Service**  | Stores workouts, suggests routines via ML|
+|🟡 **Workout Service**  | Stores workouts, suggests routines via ML|
 |🔴 **Habit Service**    | Tracks daily habits and handles upload of user content|
 |🔴 **Gamification**     | Leaderboards and achievement tracking|
 |🔴 **Notification**     | Real-time push & email notifications|
