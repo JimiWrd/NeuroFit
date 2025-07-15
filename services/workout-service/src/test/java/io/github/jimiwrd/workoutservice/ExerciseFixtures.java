@@ -30,4 +30,11 @@ public class ExerciseFixtures {
             return  (ExerciseResponse) createExercise.apply(request);
         }).map(ExerciseResponse::id).toList();
     }
+
+    public static List<UUID> createExercises(int num, BodyPart bodyPart, Function<ExerciseCreateRequest, Object> createExercise) {
+        return IntStream.range(0, num).mapToObj(n -> {
+            ExerciseCreateRequest request = exerciseCreateRequest("name" + n, bodyPart);
+            return  (ExerciseResponse) createExercise.apply(request);
+        }).map(ExerciseResponse::id).toList();
+    }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.jimiwrd.workoutservice.WorkoutServiceApplication;
 import io.github.jimiwrd.workoutservice.error.ErrorResponse;
+import io.github.jimiwrd.workoutservice.exercise.BodyPart;
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseUpdateRequest;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -170,12 +172,15 @@ public class BaseMockTest {
         throw new RuntimeException("deleteExercise() failed.");
     }
 
-    protected Object getAllExercises(int page, int size, int expectedStatusCode) {
+    protected Object getAllExercises(int pageNum, int size, Sort.Direction sort, String name, BodyPart bodyPart, int expectedStatusCode) {
         try{
             var result = mvc.perform(MockMvcRequestBuilders
-                            .get("/exercise")
-                            .param("page", Integer.toString(page))
+                            .get("/exercise/all")
+                            .param("pageNum", Integer.toString(pageNum))
                             .param("size", Integer.toString(size))
+                            .param("sort", sort != null ? sort.name() : "")
+                            .param("name", name)
+                            .param("bodyPart", bodyPart != null ? bodyPart.getFieldName() : null)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is(expectedStatusCode));
 

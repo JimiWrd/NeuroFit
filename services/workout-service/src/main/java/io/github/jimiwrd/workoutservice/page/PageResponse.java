@@ -11,14 +11,14 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class PageResponse<T> {
-    private int elements;
+    private int size;
     private int pageNum;
     private int totalPages;
     private List<T> content;
 
     public static <T> PageResponse<T> toResponse(Page<T> page){
         return PageResponse.<T>builder()
-                .elements(page.getNumberOfElements())
+                .size(page.getNumberOfElements())
                 .pageNum(page.getNumber())
                 .totalPages(page.getTotalPages())
                 .content(page.getContent())

@@ -1,5 +1,6 @@
 package io.github.jimiwrd.workoutservice.utils;
 
+import io.github.jimiwrd.workoutservice.exercise.BodyPart;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Component;
 
@@ -28,9 +29,13 @@ public class MongoSpecificationBuilder {
                 case Boolean bool -> {
                     criteria = criteria.and(k).is(bool);
                 }
-                default -> {
-                    criteria = criteria.and(k).is(v);
+                case BodyPart bp -> {
+                    criteria = criteria.and(k).is(bp);
                 }
+                case Number n -> {
+                    criteria = criteria.and(k).is(n);
+                }
+                default -> {}
             }
         }
         return criteria;

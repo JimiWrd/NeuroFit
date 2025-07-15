@@ -4,11 +4,14 @@ import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseUpdateRequest;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
 import io.github.jimiwrd.workoutservice.page.PageResponse;
+import io.github.jimiwrd.workoutservice.page.SortField;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -28,10 +31,16 @@ public class ExerciseController {
         return exerciseService.getById(id);
     }
 
-    @GetMapping
-    public PageResponse<ExerciseResponse> getAll(@RequestParam(defaultValue = "0") int page,
-                                                 @RequestParam(defaultValue = "10") int size) {
-        return exerciseService.getAll(page, size);
+    @GetMapping("/all")
+    public PageResponse<ExerciseResponse> getAll(@RequestParam(defaultValue = "0") int pageNum,
+                                                 @RequestParam(defaultValue = "10") int size,
+                                                 @RequestParam(defaultValue = "ASC") Sort.Direction sort,
+                                                 @RequestParam(defaultValue = "ID") SortField sortField,
+                                                 @RequestParam(defaultValue = "") String name,
+                                                 @RequestParam(defaultValue = "") String bodyPart) {
+        Map<String, Object> query = Map.of("name", name, "bodyPart", !bodyPart.isBlank() ? BodyPart.valueOf(bodyPart) : bodyPart);
+
+        return exerciseService.getAll(pageNum, size, sort, sortField, query);
     }
 
     @PutMapping("/{id}")

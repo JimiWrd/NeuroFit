@@ -6,11 +6,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum BodyPart {
-    ARMS("arms"),
-    LEGS("legs"),
-    BACK("back"),
-    CHEST("chest"),
-    SHOULDERS("shoulders");
+    ARMS("ARMS"),
+    LEGS("LEGS"),
+    BACK("BACK"),
+    CHEST("CHEST"),
+    SHOULDERS("SHOULDERS");
 
     private final String fieldName;
 }
