@@ -1,6 +1,7 @@
 package io.github.jimiwrd.workoutservice;
 
 import io.github.jimiwrd.workoutservice.exercise.BodyPart;
+import io.github.jimiwrd.workoutservice.exercise.ExerciseType;
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseUpdateRequest;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
@@ -12,28 +13,28 @@ import java.util.stream.IntStream;
 
 public class ExerciseFixtures {
 
-    public static ExerciseCreateRequest exerciseCreateRequest(BodyPart bodyPart) {
-        return new ExerciseCreateRequest("name", "desc", bodyPart);
+    public static ExerciseCreateRequest exerciseCreateRequest(BodyPart bodyPart, ExerciseType exerciseType) {
+        return new ExerciseCreateRequest("name", "desc", bodyPart, exerciseType);
     }
 
-    public static ExerciseCreateRequest exerciseCreateRequest(String name, BodyPart bodyPart) {
-        return new ExerciseCreateRequest(name, "desc", bodyPart);
+    public static ExerciseCreateRequest exerciseCreateRequest(String name, BodyPart bodyPart, ExerciseType exerciseType) {
+        return new ExerciseCreateRequest(name, "desc", bodyPart, exerciseType);
     }
 
-    public static ExerciseUpdateRequest exerciseUpdateRequest(String name, String description, BodyPart bodyPart) {
-        return new ExerciseUpdateRequest(name, description, bodyPart);
+    public static ExerciseUpdateRequest exerciseUpdateRequest(String name, String description, BodyPart bodyPart, ExerciseType exerciseType) {
+        return new ExerciseUpdateRequest(name, description, bodyPart, exerciseType);
     }
 
     public static List<UUID> createExercises(int num, Function<ExerciseCreateRequest, Object> createExercise) {
         return IntStream.range(0, num).mapToObj(n -> {
-            ExerciseCreateRequest request = exerciseCreateRequest("name" + n, BodyPart.ARMS);
+            ExerciseCreateRequest request = exerciseCreateRequest("name" + n, BodyPart.ARMS, ExerciseType.BARBELL);
             return  (ExerciseResponse) createExercise.apply(request);
         }).map(ExerciseResponse::id).toList();
     }
 
-    public static List<UUID> createExercises(int num, BodyPart bodyPart, Function<ExerciseCreateRequest, Object> createExercise) {
+    public static List<UUID> createExercises(int num, BodyPart bodyPart, ExerciseType exerciseType, Function<ExerciseCreateRequest, Object> createExercise) {
         return IntStream.range(0, num).mapToObj(n -> {
-            ExerciseCreateRequest request = exerciseCreateRequest("name" + n, bodyPart);
+            ExerciseCreateRequest request = exerciseCreateRequest("name" + n, bodyPart, exerciseType);
             return  (ExerciseResponse) createExercise.apply(request);
         }).map(ExerciseResponse::id).toList();
     }

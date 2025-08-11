@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -23,11 +24,32 @@ public class Exercise {
     private String name;
     private String description;
     private BodyPart bodyPart;
+    private ExerciseType type;
+    private WeightUnit weightUnit;
+    private List<ExerciseSet> sets;
 
     @CreatedDate
     private LocalDateTime createdDate;
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
+
+    @Getter
+    @AllArgsConstructor
+    public enum WeightUnit {
+        KILOGRAMS("KG"),
+        POUNDS("LBS");
+
+        private final String fieldName;
+
+        public static WeightUnit fromFieldName(String fieldName) {
+            for (WeightUnit type : values()) {
+                if (type.fieldName.equalsIgnoreCase(fieldName)) {
+                    return type;
+                }
+            }
+            throw new IllegalArgumentException("No enum constant with fieldName: " + fieldName);
+        }
+    }
 
     public static Exercise from(ExerciseCreateRequest request) {
         return Exercise.builder()
@@ -35,6 +57,8 @@ public class Exercise {
                 .name(request.name())
                 .description(request.description())
                 .bodyPart(request.bodyPart())
+                .type(request.exerciseType())
+                .weightUnit(request.weightUnit())
                 .build();
     }
 
@@ -43,7 +67,8 @@ public class Exercise {
                 this.id,
                 this.name,
                 this.description,
-                this.bodyPart
+                this.bodyPart,
+                this.type
         );
     }
 
@@ -62,6 +87,11 @@ public class Exercise {
 
         if(request.bodyPart() != null && !Objects.equals(this.bodyPart, request.bodyPart())) {
             this.bodyPart = request.bodyPart();
+            dirty = true;
+        }
+
+        if(request.exerciseType() != null && !Objects.equals(this.type, request.exerciseType())) {
+            this.type = request.exerciseType();
             dirty = true;
         }
 

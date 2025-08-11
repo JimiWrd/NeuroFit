@@ -37,8 +37,12 @@ public class ExerciseController {
                                                  @RequestParam(defaultValue = "ASC") Sort.Direction sort,
                                                  @RequestParam(defaultValue = "ID") SortField sortField,
                                                  @RequestParam(defaultValue = "") String name,
-                                                 @RequestParam(defaultValue = "") String bodyPart) {
-        Map<String, Object> query = Map.of("name", name, "bodyPart", !bodyPart.isBlank() ? BodyPart.valueOf(bodyPart) : bodyPart);
+                                                 @RequestParam(defaultValue = "") String bodyPart,
+                                                 @RequestParam(defaultValue = "") String exerciseType) {
+        Map<String, Object> query = Map.of("name", name,
+                "bodyPart", !bodyPart.isBlank() ? BodyPart.fromFieldName(bodyPart) : bodyPart,
+                "exerciseType", !exerciseType.isBlank() ? ExerciseType.fromFieldName(exerciseType) : exerciseType);
+
 
         return exerciseService.getAll(pageNum, size, sort, sortField, query);
     }

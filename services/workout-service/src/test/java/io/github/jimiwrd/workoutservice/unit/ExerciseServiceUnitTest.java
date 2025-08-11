@@ -5,6 +5,7 @@ import io.github.jimiwrd.workoutservice.error.BadRequestException;
 import io.github.jimiwrd.workoutservice.exercise.BodyPart;
 import io.github.jimiwrd.workoutservice.exercise.Exercise;
 import io.github.jimiwrd.workoutservice.exercise.ExerciseService;
+import io.github.jimiwrd.workoutservice.exercise.ExerciseType;
 import io.github.jimiwrd.workoutservice.exercise.repository.ExerciseRepository;
 import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
 import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
@@ -33,7 +34,7 @@ public class ExerciseServiceUnitTest {
 
     @Test
     void should_createNewExercise_whenValidCreateResponseGiven() {
-        ExerciseCreateRequest request = ExerciseFixtures.exerciseCreateRequest(BodyPart.ARMS);
+        ExerciseCreateRequest request = ExerciseFixtures.exerciseCreateRequest(BodyPart.ARMS, ExerciseType.BARBELL);
 
         when(exerciseRepository.save(ArgumentMatchers.any(Exercise.class))).thenReturn(Exercise.from(request));
 
@@ -47,7 +48,7 @@ public class ExerciseServiceUnitTest {
     @Test
     void should_getExerciseAndReturnResponse_whenExists() {
 
-        ExerciseCreateRequest request = ExerciseFixtures.exerciseCreateRequest(BodyPart.ARMS);
+        ExerciseCreateRequest request = ExerciseFixtures.exerciseCreateRequest(BodyPart.ARMS, ExerciseType.BARBELL);
         Exercise exercise = Exercise.from(request);
 
         when(exerciseRepository.findById(ArgumentMatchers.any())).thenReturn(Optional.of(exercise));
@@ -64,5 +65,4 @@ public class ExerciseServiceUnitTest {
         assertThatThrownBy(() -> exerciseService.getById(UUID.randomUUID()))
                 .isInstanceOf(BadRequestException.class);
     }
-
 }
