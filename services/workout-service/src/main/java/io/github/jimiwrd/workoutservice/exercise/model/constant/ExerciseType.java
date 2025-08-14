@@ -1,4 +1,4 @@
-package io.github.jimiwrd.workoutservice.exercise;
+package io.github.jimiwrd.workoutservice.exercise.model.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -2,13 +2,11 @@ package io.github.jimiwrd.workoutservice.unit;
 
 import io.github.jimiwrd.workoutservice.ExerciseFixtures;
 import io.github.jimiwrd.workoutservice.error.BadRequestException;
-import io.github.jimiwrd.workoutservice.exercise.BodyPart;
-import io.github.jimiwrd.workoutservice.exercise.Exercise;
 import io.github.jimiwrd.workoutservice.exercise.ExerciseService;
-import io.github.jimiwrd.workoutservice.exercise.ExerciseType;
+import io.github.jimiwrd.workoutservice.exercise.model.Exercise;
+import io.github.jimiwrd.workoutservice.exercise.model.request.ExerciseCreateRequest;
+import io.github.jimiwrd.workoutservice.exercise.model.response.ExerciseResponse;
 import io.github.jimiwrd.workoutservice.exercise.repository.ExerciseRepository;
-import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
-import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -34,7 +32,7 @@ public class ExerciseServiceUnitTest {
 
     @Test
     void should_createNewExercise_whenValidCreateResponseGiven() {
-        ExerciseCreateRequest request = ExerciseFixtures.exerciseCreateRequest(BodyPart.ARMS, ExerciseType.BARBELL);
+        ExerciseCreateRequest request = ExerciseFixtures.exerciseCreateRequest();
 
         when(exerciseRepository.save(ArgumentMatchers.any(Exercise.class))).thenReturn(Exercise.from(request));
 
@@ -48,7 +46,7 @@ public class ExerciseServiceUnitTest {
     @Test
     void should_getExerciseAndReturnResponse_whenExists() {
 
-        ExerciseCreateRequest request = ExerciseFixtures.exerciseCreateRequest(BodyPart.ARMS, ExerciseType.BARBELL);
+        ExerciseCreateRequest request = ExerciseFixtures.exerciseCreateRequest();
         Exercise exercise = Exercise.from(request);
 
         when(exerciseRepository.findById(ArgumentMatchers.any())).thenReturn(Optional.of(exercise));

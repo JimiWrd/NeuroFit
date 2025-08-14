@@ -1,6 +1,6 @@
 package io.github.jimiwrd.workoutservice.unit;
 
-import io.github.jimiwrd.workoutservice.exercise.BodyPart;
+import io.github.jimiwrd.workoutservice.exercise.model.constant.BodyPart;
 import io.github.jimiwrd.workoutservice.utils.MongoSpecificationBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

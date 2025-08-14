@@ -1,8 +1,10 @@
 package io.github.jimiwrd.workoutservice.exercise;
 
-import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
-import io.github.jimiwrd.workoutservice.exercise.request.ExerciseUpdateRequest;
-import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
+import io.github.jimiwrd.workoutservice.exercise.model.constant.BodyPart;
+import io.github.jimiwrd.workoutservice.exercise.model.constant.ExerciseType;
+import io.github.jimiwrd.workoutservice.exercise.model.request.ExerciseCreateRequest;
+import io.github.jimiwrd.workoutservice.exercise.model.request.ExerciseUpdateRequest;
+import io.github.jimiwrd.workoutservice.exercise.model.response.ExerciseResponse;
 import io.github.jimiwrd.workoutservice.page.PageResponse;
 import io.github.jimiwrd.workoutservice.page.SortField;
 import jakarta.validation.Valid;
@@ -41,7 +43,7 @@ public class ExerciseController {
                                                  @RequestParam(defaultValue = "") String exerciseType) {
         Map<String, Object> query = Map.of("name", name,
                 "bodyPart", !bodyPart.isBlank() ? BodyPart.fromFieldName(bodyPart) : bodyPart,
-                "exerciseType", !exerciseType.isBlank() ? ExerciseType.fromFieldName(exerciseType) : exerciseType);
+                "type", !exerciseType.isBlank() ? ExerciseType.fromFieldName(exerciseType) : exerciseType);
 
 
         return exerciseService.getAll(pageNum, size, sort, sortField, query);

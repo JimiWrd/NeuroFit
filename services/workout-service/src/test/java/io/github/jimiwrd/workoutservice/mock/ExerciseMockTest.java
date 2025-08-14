@@ -3,11 +3,12 @@ package io.github.jimiwrd.workoutservice.mock;
 import io.github.jimiwrd.workoutservice.ExerciseFixtures;
 import io.github.jimiwrd.workoutservice.error.ErrorCode;
 import io.github.jimiwrd.workoutservice.error.ErrorResponse;
-import io.github.jimiwrd.workoutservice.exercise.BodyPart;
-import io.github.jimiwrd.workoutservice.exercise.ExerciseType;
-import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
-import io.github.jimiwrd.workoutservice.exercise.request.ExerciseUpdateRequest;
-import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
+import io.github.jimiwrd.workoutservice.exercise.model.Exercise;
+import io.github.jimiwrd.workoutservice.exercise.model.constant.BodyPart;
+import io.github.jimiwrd.workoutservice.exercise.model.constant.ExerciseType;
+import io.github.jimiwrd.workoutservice.exercise.model.request.ExerciseCreateRequest;
+import io.github.jimiwrd.workoutservice.exercise.model.request.ExerciseUpdateRequest;
+import io.github.jimiwrd.workoutservice.exercise.model.response.ExerciseResponse;
 import io.github.jimiwrd.workoutservice.page.PageResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Sort;
@@ -20,7 +21,7 @@ class ExerciseMockTest extends BaseMockTest {
 
     @Test
     void createExercise_whenValidRequest_shouldReturnResponse() {
-        ExerciseCreateRequest request = ExerciseFixtures.exerciseCreateRequest(BodyPart.ARMS, ExerciseType.BARBELL);
+        ExerciseCreateRequest request = ExerciseFixtures.exerciseCreateRequest();
 
         ExerciseResponse response = (ExerciseResponse) createExercise(request, 200);
 
@@ -32,7 +33,7 @@ class ExerciseMockTest extends BaseMockTest {
 
     @Test
     void createExercise_whenInvalidRequest_shouldReturnErrorResponse() {
-        ExerciseCreateRequest request = new ExerciseCreateRequest(null, null, null, null);
+        ExerciseCreateRequest request = new ExerciseCreateRequest(null, null, null, null, null);
 
         ErrorResponse response = (ErrorResponse) createExercise(request, 400);
 
@@ -42,7 +43,7 @@ class ExerciseMockTest extends BaseMockTest {
 
     @Test
     void getExercise_exerciseExists_shouldReturnResponse() {
-        ExerciseCreateRequest request = ExerciseFixtures.exerciseCreateRequest(BodyPart.ARMS, ExerciseType.BARBELL);
+        ExerciseCreateRequest request = ExerciseFixtures.exerciseCreateRequest();
 
         ExerciseResponse created = (ExerciseResponse) createExercise(request, 200);
 
@@ -64,7 +65,7 @@ class ExerciseMockTest extends BaseMockTest {
 
     @Test
     void updateExercise_validRequest_shouldReturnResponse() {
-        ExerciseCreateRequest createRequest = ExerciseFixtures.exerciseCreateRequest(BodyPart.ARMS, ExerciseType.BARBELL);
+        ExerciseCreateRequest createRequest = ExerciseFixtures.exerciseCreateRequest();
         ExerciseResponse created = (ExerciseResponse) createExercise(createRequest, 200);
 
         ExerciseUpdateRequest updateRequest = ExerciseFixtures.exerciseUpdateRequest("new name", "new desc", BodyPart.LEGS, ExerciseType.DUMBBELL);
@@ -88,7 +89,7 @@ class ExerciseMockTest extends BaseMockTest {
 
     @Test
     void deleteExercise_exists_shouldReturnResponseEntityString() {
-        ExerciseCreateRequest request = ExerciseFixtures.exerciseCreateRequest(BodyPart.ARMS, ExerciseType.BARBELL);
+        ExerciseCreateRequest request = ExerciseFixtures.exerciseCreateRequest();
 
         ExerciseResponse response = (ExerciseResponse) createExercise(request, 200);
 
@@ -128,7 +129,8 @@ class ExerciseMockTest extends BaseMockTest {
     void getAllExercises_withFilterByNameAndBodyPart_shouldReturnPageResponses_filteredByNameAndBodyPart() {
         //Create 13 exercises to fetch, different BodyParts
         ExerciseFixtures.createExercises(10, this::createExercise);
-        ExerciseFixtures.createExercises(3, BodyPart.BACK, ExerciseType.BARBELL, this::createExercise);
+
+        ExerciseFixtures.createExercises(3, BodyPart.BACK, ExerciseType.BARBELL, Exercise.WeightUnit.KILOGRAMS, this::createExercise);
 
         int pageNum = 0;
         int size = 10;
@@ -149,7 +151,8 @@ class ExerciseMockTest extends BaseMockTest {
     void getAllExercises_withFilterByName_shouldReturnPageResponses_filteredByName() {
         //Create 13 exercises to fetch, different BodyParts
         ExerciseFixtures.createExercises(10, this::createExercise);
-        ExerciseFixtures.createExercises(3, BodyPart.BACK, ExerciseType.BARBELL, this::createExercise);
+
+        ExerciseFixtures.createExercises(3, BodyPart.BACK, ExerciseType.BARBELL, Exercise.WeightUnit.KILOGRAMS, this::createExercise);
 
         int pageNum = 0;
         int size = 15;
@@ -173,7 +176,8 @@ class ExerciseMockTest extends BaseMockTest {
     void getAllExercises_withFilterByBodyPart_shouldReturnPageResponses_filteredByBodyPart() {
         //Create 13 exercises to fetch, different BodyParts
         ExerciseFixtures.createExercises(10, this::createExercise);
-        ExerciseFixtures.createExercises(3, BodyPart.BACK, ExerciseType.BARBELL, this::createExercise);
+
+        ExerciseFixtures.createExercises(3, BodyPart.BACK, ExerciseType.BARBELL, Exercise.WeightUnit.KILOGRAMS, this::createExercise);
 
         int pageNum = 0;
         int size = 10;
@@ -197,7 +201,8 @@ class ExerciseMockTest extends BaseMockTest {
     void getAllExercises_withFilterByExerciseType_shouldReturnPageResponses_filteredByExerciseType() {
         //Create 13 exercises to fetch, different BodyParts
         ExerciseFixtures.createExercises(10, this::createExercise);
-        ExerciseFixtures.createExercises(3, BodyPart.BACK, ExerciseType.DUMBBELL, this::createExercise);
+
+        ExerciseFixtures.createExercises(3, BodyPart.BACK, ExerciseType.DUMBBELL, Exercise.WeightUnit.KILOGRAMS, this::createExercise);
 
         int pageNum = 0;
         int size = 10;

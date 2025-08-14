@@ -1,7 +1,7 @@
-package io.github.jimiwrd.workoutservice.exercise.request;
+package io.github.jimiwrd.workoutservice.exercise.model.request;
 
-import io.github.jimiwrd.workoutservice.exercise.BodyPart;
-import io.github.jimiwrd.workoutservice.exercise.ExerciseType;
+import io.github.jimiwrd.workoutservice.exercise.model.constant.BodyPart;
+import io.github.jimiwrd.workoutservice.exercise.model.constant.ExerciseType;
 
 public record ExerciseUpdateRequest(String name,
                                     String description,

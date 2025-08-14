@@ -1,15 +1,16 @@
-package io.github.jimiwrd.workoutservice.exercise;
+package io.github.jimiwrd.workoutservice.exercise.model;
 
-import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
-import io.github.jimiwrd.workoutservice.exercise.request.ExerciseUpdateRequest;
-import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
+import io.github.jimiwrd.workoutservice.exercise.model.constant.BodyPart;
+import io.github.jimiwrd.workoutservice.exercise.model.constant.ExerciseType;
+import io.github.jimiwrd.workoutservice.exercise.model.request.ExerciseCreateRequest;
+import io.github.jimiwrd.workoutservice.exercise.model.request.ExerciseUpdateRequest;
+import io.github.jimiwrd.workoutservice.exercise.model.response.ExerciseResponse;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -26,7 +27,6 @@ public class Exercise {
     private BodyPart bodyPart;
     private ExerciseType type;
     private WeightUnit weightUnit;
-    private List<ExerciseSet> sets;
 
     @CreatedDate
     private LocalDateTime createdDate;
@@ -68,7 +68,8 @@ public class Exercise {
                 this.name,
                 this.description,
                 this.bodyPart,
-                this.type
+                this.type,
+                this.weightUnit
         );
     }
 

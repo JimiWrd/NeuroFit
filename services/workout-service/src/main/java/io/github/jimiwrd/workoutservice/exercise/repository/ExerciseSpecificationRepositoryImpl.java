@@ -1,6 +1,6 @@
 package io.github.jimiwrd.workoutservice.exercise.repository;
 
-import io.github.jimiwrd.workoutservice.exercise.Exercise;
+import io.github.jimiwrd.workoutservice.exercise.model.Exercise;
 import io.github.jimiwrd.workoutservice.utils.MongoSpecificationBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
