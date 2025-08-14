@@ -1,10 +1,11 @@
 package io.github.jimiwrd.workoutservice.exercise;
 
 import io.github.jimiwrd.workoutservice.error.BadRequestException;
+import io.github.jimiwrd.workoutservice.exercise.model.Exercise;
+import io.github.jimiwrd.workoutservice.exercise.model.request.ExerciseCreateRequest;
+import io.github.jimiwrd.workoutservice.exercise.model.request.ExerciseUpdateRequest;
+import io.github.jimiwrd.workoutservice.exercise.model.response.ExerciseResponse;
 import io.github.jimiwrd.workoutservice.exercise.repository.ExerciseRepository;
-import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
-import io.github.jimiwrd.workoutservice.exercise.request.ExerciseUpdateRequest;
-import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
 import io.github.jimiwrd.workoutservice.page.PageResponse;
 import io.github.jimiwrd.workoutservice.page.SortField;
 import lombok.RequiredArgsConstructor;

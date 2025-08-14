@@ -1,6 +1,8 @@
 package io.github.jimiwrd.workoutservice.utils;
 
-import io.github.jimiwrd.workoutservice.exercise.BodyPart;
+import io.github.jimiwrd.workoutservice.exercise.model.Exercise;
+import io.github.jimiwrd.workoutservice.exercise.model.constant.BodyPart;
+import io.github.jimiwrd.workoutservice.exercise.model.constant.ExerciseType;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +33,12 @@ public class MongoSpecificationBuilder {
                 }
                 case BodyPart bp -> {
                     criteria = criteria.and(k).is(bp);
+                }
+                case ExerciseType et -> {
+                    criteria = criteria.and(k).is(et);
+                }
+                case Exercise.WeightUnit wu -> {
+                    criteria = criteria.and(k).is(wu);
                 }
                 case Number n -> {
                     criteria = criteria.and(k).is(n);

@@ -4,10 +4,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.jimiwrd.workoutservice.WorkoutServiceApplication;
 import io.github.jimiwrd.workoutservice.error.ErrorResponse;
-import io.github.jimiwrd.workoutservice.exercise.BodyPart;
-import io.github.jimiwrd.workoutservice.exercise.request.ExerciseCreateRequest;
-import io.github.jimiwrd.workoutservice.exercise.request.ExerciseUpdateRequest;
-import io.github.jimiwrd.workoutservice.exercise.response.ExerciseResponse;
+import io.github.jimiwrd.workoutservice.exercise.model.constant.BodyPart;
+import io.github.jimiwrd.workoutservice.exercise.model.constant.ExerciseType;
+import io.github.jimiwrd.workoutservice.exercise.model.request.ExerciseCreateRequest;
+import io.github.jimiwrd.workoutservice.exercise.model.request.ExerciseUpdateRequest;
+import io.github.jimiwrd.workoutservice.exercise.model.response.ExerciseResponse;
 import io.github.jimiwrd.workoutservice.page.PageResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,7 +173,7 @@ public class BaseMockTest {
         throw new RuntimeException("deleteExercise() failed.");
     }
 
-    protected Object getAllExercises(int pageNum, int size, Sort.Direction sort, String name, BodyPart bodyPart, int expectedStatusCode) {
+    protected Object getAllExercises(int pageNum, int size, Sort.Direction sort, String name, BodyPart bodyPart, ExerciseType exerciseType, int expectedStatusCode) {
         try{
             var result = mvc.perform(MockMvcRequestBuilders
                             .get("/exercise/all")
@@ -181,6 +182,7 @@ public class BaseMockTest {
                             .param("sort", sort != null ? sort.name() : "")
                             .param("name", name)
                             .param("bodyPart", bodyPart != null ? bodyPart.getFieldName() : null)
+                            .param("exerciseType", exerciseType != null ? exerciseType.getFieldName() : null)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is(expectedStatusCode));
 

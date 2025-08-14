@@ -1,6 +1,6 @@
 package io.github.jimiwrd.workoutservice.exercise.repository;
 
-import io.github.jimiwrd.workoutservice.exercise.Exercise;
+import io.github.jimiwrd.workoutservice.exercise.model.Exercise;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
